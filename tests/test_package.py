@@ -1,4 +1,4 @@
-import hgg_coffea as m
+import wpt_coffea as m
 
 
 def test_version():
