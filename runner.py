@@ -11,7 +11,7 @@ from coffea import processor
 from coffea.util import save
 from dask.distributed import Client, Worker, WorkerPlugin
 
-from hgg_coffea.workflows import taggers, workflows
+from wpt_coffea.workflows import taggers, workflows
 
 
 def validate(file):

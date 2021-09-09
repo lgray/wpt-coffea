@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 
 [tool.setuptools_scm]
-write_to = "src/hgg_coffea/_version.py"
+write_to = "src/wpt_coffea/_version.py"
 
 
 [tool.pytest.ini_options]
