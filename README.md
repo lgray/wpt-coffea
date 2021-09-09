@@ -1,5 +1,5 @@
-# hgg-coffea
-Tools for running the CMS Higgs to Two Photons Analysis on NanoAOD
+# wpt-coffea
+Tools for running the FNAL WPt analysis in coffea
 
 [![Actions Status][actions-badge]][actions-link]
 [![Documentation Status][rtd-badge]][rtd-link]
