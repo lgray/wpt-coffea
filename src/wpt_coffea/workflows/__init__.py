@@ -1,5 +1,5 @@
-from hgg_coffea.workflows.dystudies import DYStudiesProcessor
-from hgg_coffea.workflows.taggers import taggers
+from wpt_coffea.workflows.dystudies import DYStudiesProcessor
+from wpt_coffea.workflows.taggers import taggers
 
 workflows = {}
 

@@ -2,7 +2,7 @@ from typing import Any, Dict, List, Optional
 
 import awkward as ak
 
-from hgg_coffea.workflows.base import HggBaseProcessor
+from wpt_coffea.workflows.base import HggBaseProcessor
 
 
 class DYStudiesProcessor(HggBaseProcessor):

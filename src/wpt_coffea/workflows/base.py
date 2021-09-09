@@ -12,9 +12,9 @@ import pandas
 import vector
 from coffea import processor
 
-from hgg_coffea.tools.chained_quantile import ChainedQuantileRegression
+from wpt_coffea.tools.chained_quantile import ChainedQuantileRegression
 
-from hgg_coffea.tools.diphoton_mva import (  # isort:skip
+from wpt_coffea.tools.diphoton_mva import (  # isort:skip
     calculate_diphoton_mva,
     load_diphoton_mva,
 )
