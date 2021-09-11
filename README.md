@@ -64,7 +64,7 @@ conda activate coffea
 ```
 Install coffea, xrootd, and more:
 ```bash
-conda install -c conda-forge coffea # pip install git+https://github.com/CoffeaTeam/coffea.git # for bleeding edge
+pip install git+https://github.com/CoffeaTeam/coffea.git # needs bleeding edge coffea to run right now
 conda install -c conda-forge xrootd
 conda install -c conda-forge ca-certificates
 conda install -c conda-forge ca-policy-lcg
