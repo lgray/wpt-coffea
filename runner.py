@@ -5,13 +5,14 @@ import sys
 import time
 from typing import List
 
+import coffea
 import numpy as np
 import uproot
 from coffea import processor
 from coffea.util import save
 from dask.distributed import Client, Worker, WorkerPlugin
 
-from wpt_coffea.workflows import taggers, workflows
+from wpt_coffea.workflows import workflows
 
 
 def validate(file):
@@ -63,44 +64,6 @@ def get_main_parser():
         choices=list(workflows.keys()),
         help="Which processor to run",
         required=True,
-    )
-    parser.add_argument(
-        "--ts",
-        "--tagger-set",
-        dest="taggers",
-        nargs="+",
-        default=None,
-        choices=list(taggers.keys()),
-        help="The tagger set to apply to this run.",
-    )
-    parser.add_argument(
-        "--meta",
-        "--metaconditions",
-        dest="metaconditions",
-        choices=os.listdir(os.path.join(os.path.dirname(__file__), "metaconditions")),
-        help="What metaconditions to load",
-        required=True,
-    )
-    parser.add_argument(
-        "--systs",
-        "--systematics",
-        dest="systematics",
-        default=False,
-        action="store_true",
-        help="Run systematic variations and store to output.",
-    )
-    parser.add_argument(
-        "--no-trigger",
-        dest="use_trigger",
-        default=True,
-        action="store_false",
-        help="Turn off trigger selection",
-    )
-    parser.add_argument(
-        "-d",
-        "--dump",
-        default=None,
-        help="Path to dump parquet outputs to (default: None)",
     )
     parser.add_argument(
         "-o",
@@ -287,20 +250,9 @@ if __name__ == "__main__":
 
     # load workflow
     if args.workflow in workflows:
-        wf_taggers = None
-        if args.taggers is not None:
-            for tagger in args.taggers:
-                if tagger not in taggers.keys():
-                    raise NotImplementedError
-            wf_taggers = [taggers[tagger]() for tagger in args.taggers]
-        with open(os.path.join(metaCondsPath, args.metaconditions)) as f:
-            processor_instance = workflows[args.workflow](
-                json.load(f),
-                args.systematics,
-                args.use_trigger,
-                args.dump,
-                wf_taggers,
-            )  # additional args can go here to configure a processor
+        processor_instance = workflows[
+            args.workflow
+        ]()  # additional args can go here to configure a processor
     else:
         raise NotImplementedError
 
@@ -353,7 +305,7 @@ if __name__ == "__main__":
             executor=_exec,
             executor_args={
                 "skipbadfiles": args.skipbadfiles,
-                "schema": processor.NanoAODSchema,
+                "schema": coffea.nanoevents.schemas.BaseSchema,
                 "workers": args.workers,
             },
             chunksize=args.chunk,
