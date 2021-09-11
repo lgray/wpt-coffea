@@ -5,6 +5,7 @@ import sys
 import time
 from typing import List
 
+import coffea
 import numpy as np
 import uproot
 from coffea import processor
@@ -304,7 +305,7 @@ if __name__ == "__main__":
             executor=_exec,
             executor_args={
                 "skipbadfiles": args.skipbadfiles,
-                "schema": processor.BaseSchema,
+                "schema": coffea.nanoevents.schemas.BaseSchema,
                 "workers": args.workers,
             },
             chunksize=args.chunk,

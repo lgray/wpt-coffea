@@ -1,4 +1,4 @@
-from wpt_coffea.workflows.wpt import WpTProcessor
+from wpt_coffea.workflows.ptw import WpTProcessor
 
 workflows = {}
 
