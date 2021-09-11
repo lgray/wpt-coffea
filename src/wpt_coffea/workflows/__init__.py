@@ -1,8 +1,7 @@
-from wpt_coffea.workflows.dystudies import DYStudiesProcessor
-from wpt_coffea.workflows.taggers import taggers
+from wpt_coffea.workflows.wpt import WpTProcessor
 
 workflows = {}
 
-workflows["dystudies"] = DYStudiesProcessor
+workflows["wpt"] = WpTProcessor
 
-__all__ = ["workflows", "taggers", "DYStudiesProcessor"]
+__all__ = ["workflows"]
