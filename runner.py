@@ -191,7 +191,7 @@ if __name__ == "__main__":
     with open(args.samplejson) as f:
         sample_dict = json.load(f)
     for key in sample_dict.keys():
-        sample_dict[key] = sample_dict[key][: args.limit]
+        sample_dict[key]["files"] = sample_dict[key]["files"][: args.limit]
     if args.executor == "dask/casa":
         for key in sample_dict.keys():
             sample_dict[key] = [
