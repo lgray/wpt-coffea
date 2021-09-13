@@ -34,6 +34,7 @@ class WpTProcessor(processor.ProcessorABC):  # type: ignore
             ]
         )
         self.recoil_systs = numpy.array([1, 2, 3, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
+
         self.sfweight_systs_names = numpy.array(
             ["main", "mc", "fsr", "bkg", "tagpt", "effstat", "pfireu", "pfired"]
         )
@@ -71,6 +72,8 @@ class WpTProcessor(processor.ProcessorABC):  # type: ignore
 
     def process(self, events: awkward.Array) -> Dict[Any, Any]:
         out = self.get_histograms()
+
+        isMC = events.metadata["data_kind"] == "mc"
 
         lep = self.get_4mom(events, "lep")
 
@@ -111,7 +114,7 @@ class WpTProcessor(processor.ProcessorABC):  # type: ignore
                 mt=mt[:, i],
                 ptW=wpt.pt,
                 ptW_true=wpt_true.pt,
-                weight=1.0,
+                weight=events.evtWeight[:, 0] if isMC else 1.0,
             )
 
         for i in range(self.sfweight_systs.size):
@@ -124,7 +127,7 @@ class WpTProcessor(processor.ProcessorABC):  # type: ignore
                 mt=mt[:, 0],  # idx 0 is central value for mt
                 ptW=wpt.pt,
                 ptW_true=wpt_true.pt,
-                weight=1.0,
+                weight=events.evtWeight[:, self.sfweight_systs[i]] if isMC else 1.0,
             )
 
         return out
