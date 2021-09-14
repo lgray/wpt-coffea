@@ -53,18 +53,18 @@ class WpTProcessor(processor.ProcessorABC):  # type: ignore
         return cartesian.to_rhophietatau()
 
     def get_histograms(self, dataset: str) -> Dict[Any, Any]:
-        lepeta_bins = [0, 1.0, 1.4442, 3.0]  # drop last two bins for muons!
+        lepeta_bins = [0, 1.4442, 2.4]
         wpt_bins = [0, 8.0, 16.0, 24.0, 32.0, 40.0, 50.0, 70.0, 100.0]
         mt_min, mt_max, mt_bins = 0.0, 120.0, 12
 
         return {
             dataset: (
                 hist.Hist.new.StrCategory([], name="systematic", growth=True)
-                .IntCategory([-1, 1], name="charge")
-                .Variable(lepeta_bins, name="abseta")
-                .Regular(mt_bins, mt_min, mt_max, name="mt")
-                .Variable(wpt_bins, name="ptW")
-                .Variable(wpt_bins, name="ptW_true")
+                .IntCategory([-1, 1], name="charge", label="q")
+                .Variable(lepeta_bins, name="abseta", label=r"|\eta|")
+                .Regular(mt_bins, mt_min, mt_max, name="mt", label=r"M_{T}^{W} (GeV)")
+                .Variable(wpt_bins, name="ptW", label=r"p_{T}^{W} (GeV)")
+                .Variable(wpt_bins, name="ptW_true", label=r"True p_{T}^{W} (GeV)")
                 .Weight()
             ),
         }
@@ -85,7 +85,7 @@ class WpTProcessor(processor.ProcessorABC):  # type: ignore
         wpt_true = self.get_4mom(events, "genV")
 
         goodMetVars = events.metVars[:, self.recoil_systs if isMC else [0]]
-        goodMetVarsPhi = events.metVars[:, self.recoil_systs if isMC else [0]]
+        goodMetVarsPhi = events.metVarsPhi[:, self.recoil_systs if isMC else [0]]
 
         met = awkward.zip(
             {
@@ -117,7 +117,7 @@ class WpTProcessor(processor.ProcessorABC):  # type: ignore
                     weight=events.evtWeight[:, 0],
                 )
 
-            for i in range(self.sfweight_systs.size):
+            for i in range(1, self.sfweight_systs.size):  # skip "main" as it == "cent"
                 syst_name = self.sfweight_systs_names[self.sfweight_systs[i]]
                 out[dataset].fill(
                     systematic=syst_name,
