@@ -52,15 +52,14 @@ class WpTProcessor(processor.ProcessorABC):  # type: ignore
         )
         return cartesian.to_rhophietatau()
 
-    def get_histograms(self) -> Dict[Any, Any]:
+    def get_histograms(self, dataset: str) -> Dict[Any, Any]:
         lepeta_bins = [0, 1.0, 1.4442, 3.0]  # drop last two bins for muons!
         wpt_bins = [0, 8.0, 16.0, 24.0, 32.0, 40.0, 50.0, 70.0, 100.0]
         mt_min, mt_max, mt_bins = 0.0, 120.0, 12
 
         return {
-            "analysis": (
-                hist.Hist.new.StrCategory([], name="dataset", growth=True)
-                .StrCategory([], name="systematic", growth=True)
+            dataset: (
+                hist.Hist.new.StrCategory([], name="systematic", growth=True)
                 .IntCategory([-1, 1], name="charge")
                 .Variable(lepeta_bins, name="abseta")
                 .Regular(mt_bins, mt_min, mt_max, name="mt")
@@ -71,7 +70,8 @@ class WpTProcessor(processor.ProcessorABC):  # type: ignore
         }
 
     def process(self, events: awkward.Array) -> Dict[Any, Any]:
-        out = self.get_histograms()
+        dataset = events.metadata["dataset"]
+        out = self.get_histograms(dataset)
 
         isMC = events.metadata["data_kind"] == "mc"
 
@@ -84,18 +84,18 @@ class WpTProcessor(processor.ProcessorABC):  # type: ignore
         lep = lep[wSR_cut]
         wpt_true = self.get_4mom(events, "genV")
 
-        goodMetVars = events.metVars[:, self.recoil_systs]
-        goodMetVarsPhi = events.metVars[:, self.recoil_systs]
+        goodMetVars = events.metVars[:, self.recoil_systs if isMC else [0]]
+        goodMetVarsPhi = events.metVars[:, self.recoil_systs if isMC else [0]]
 
         met = awkward.zip(
             {
-                "rho": goodMetVars[:, 0],
-                "phi": goodMetVarsPhi[:, 0],
+                "rho": goodMetVars,
+                "phi": goodMetVarsPhi,
             },  # index 0 after selection above is central value
             with_name="Momentum2D",
         )
 
-        wpt = -1.0 * (lep.to_rhophi() + met)
+        wpt = -1.0 * (lep.to_rhophi()[:, None] + met)
 
         mt = numpy.sqrt(
             2
@@ -104,30 +104,39 @@ class WpTProcessor(processor.ProcessorABC):  # type: ignore
             * (1.0 - numpy.cos(lep.phi[:, None] - goodMetVarsPhi))
         )
 
-        for i in range(self.recoil_systs.size):
-            syst_name = self.recoil_systs_names[self.recoil_systs[i]]
-            out["analysis"].fill(
-                dataset=events.metadata["dataset"],
-                systematic=syst_name,
-                charge=events.q,
-                abseta=numpy.abs(lep.eta),
-                mt=mt[:, i],
-                ptW=wpt.pt,
-                ptW_true=wpt_true.pt,
-                weight=events.evtWeight[:, 0] if isMC else 1.0,
-            )
+        if isMC:
+            for i in range(self.recoil_systs.size):
+                syst_name = self.recoil_systs_names[self.recoil_systs[i]]
+                out[dataset].fill(
+                    systematic=syst_name,
+                    charge=events.q,
+                    abseta=numpy.abs(lep.eta),
+                    mt=mt[:, i],
+                    ptW=wpt[:, i].pt,
+                    ptW_true=wpt_true.pt,
+                    weight=events.evtWeight[:, 0],
+                )
 
-        for i in range(self.sfweight_systs.size):
-            syst_name = self.sfweight_systs_names[self.sfweight_systs[i]]
-            out["analysis"].fill(
-                dataset=events.metadata["dataset"],
-                systematic=syst_name,
+            for i in range(self.sfweight_systs.size):
+                syst_name = self.sfweight_systs_names[self.sfweight_systs[i]]
+                out[dataset].fill(
+                    systematic=syst_name,
+                    charge=events.q,
+                    abseta=numpy.abs(lep.eta),
+                    mt=mt[:, 0],  # idx 0 is central value for mt
+                    ptW=wpt[:, 0].pt,
+                    ptW_true=wpt_true.pt,
+                    weight=events.evtWeight[:, self.sfweight_systs[i]],
+                )
+        else:
+            out[dataset].fill(
+                systematic="cent",
                 charge=events.q,
                 abseta=numpy.abs(lep.eta),
-                mt=mt[:, 0],  # idx 0 is central value for mt
-                ptW=wpt.pt,
+                mt=mt[:, 0],
+                ptW=wpt[:, 0].pt,
                 ptW_true=wpt_true.pt,
-                weight=events.evtWeight[:, self.sfweight_systs[i]] if isMC else 1.0,
+                weight=1.0,
             )
 
         return out
