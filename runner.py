@@ -274,10 +274,10 @@ if __name__ == "__main__":
                     .split(":")[-1]
                     .strip()
                 )
-            except Exception:
+            except Exception as err:
                 raise RuntimeError(
                     "x509 proxy could not be parsed, try creating it with 'voms-proxy-init'"
-                )
+                ) from err
             _x509_path = os.environ["HOME"] + f'/.{_x509_localpath.split("/")[-1]}'
             os.system(f"cp {_x509_localpath} {_x509_path}")
 
