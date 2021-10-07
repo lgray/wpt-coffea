@@ -1,0 +1,16 @@
+{
+    "data_mu": {"files": ["root://cmseos.fnal.gov//store/user/lagray/ptw/awmunu/data_select.split.root"], "metadata": {"data_kind": "data", "channel": "mu"}},
+    "wl0_mu": {"files": ["root://cmseos.fnal.gov//store/user/lagray/ptw/awmunu/wm0_select.split.root"], "metadata": {"data_kind": "mc", "channel": "mu"}},
+    "wl1_mu": {"files": ["root://cmseos.fnal.gov//store/user/lagray/ptw/awmunu/wm1_select.split.root"], "metadata": {"data_kind": "mc", "channel": "mu"}},
+    "wl2_mu": {"files": ["root://cmseos.fnal.gov//store/user/lagray/ptw/awmunu/wm2_select.split.root"], "metadata": {"data_kind": "mc", "channel": "mu"}},
+    "ttbar_dilepton_mu": {"files": ["root://cmseos.fnal.gov//store/user/lagray/ptw/awmunu/top3_select.split.root"], "metadata": {"data_kind": "mc", "channel": "mu"}},
+    "ttbar_onelepton_mu": {"files": ["root://cmseos.fnal.gov//store/user/lagray/ptw/awmunu/top2_select.split.root"], "metadata": {"data_kind": "mc", "channel": "mu"}},
+    "ttbar_hadronic_mu": {"files": ["root://cmseos.fnal.gov//store/user/lagray/ptw/awmunu/top1_select.split.root"], "metadata": {"data_kind": "mc", "channel": "mu"}},
+    "ww_mu": {"files": ["root://cmseos.fnal.gov//store/user/lagray/ptw/awmunu/ww_select.split.root"], "metadata": {"data_kind": "mc", "channel": "mu"}},
+    "wz_mu": {"files": ["root://cmseos.fnal.gov//store/user/lagray/ptw/awmunu/wz_select.split.root"], "metadata": {"data_kind": "mc", "channel": "mu"}},
+    "zz_mu": {"files": ["root://cmseos.fnal.gov//store/user/lagray/ptw/awmunu/zz_select.split.root"], "metadata": {"data_kind": "mc", "channel": "mu"}},
+    "zll_mu": {"files": ["root://cmseos.fnal.gov//store/user/lagray/ptw/awmunu/zxx_select.split.root"], "metadata": {"data_kind": "mc", "channel": "mu"}},
+    "wtau0_mu": {"files": ["root://cmseos.fnal.gov//store/user/lagray/ptw/awmunu/wx0_select.split.root"], "metadata": {"data_kind": "mc", "channel": "mu"}},
+    "wtau1_mu": {"files": ["root://cmseos.fnal.gov//store/user/lagray/ptw/awmunu/wx1_select.split.root"], "metadata": {"data_kind": "mc", "channel": "mu"}},
+    "wtau2_mu": {"files": ["root://cmseos.fnal.gov//store/user/lagray/ptw/awmunu/wx2_select.split.root"], "metadata": {"data_kind": "mc", "channel": "mu"}}
+}
