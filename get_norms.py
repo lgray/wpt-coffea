@@ -9,7 +9,7 @@ parser = argparse.ArgumentParser(
 )
 
 parser.add_argument(
-    "fileset",
+    "--fileset",
     type=str,
     help="The fileset extract data from.",
 )

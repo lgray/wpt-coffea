@@ -96,17 +96,6 @@ class WpTQCDProcessor(processor.ProcessorABC):  # type: ignore
             weight=evtWeight,
         )
 
-        #for i in range(1, self.sfweight_systs.size):  # skip "main" as it == "cent"
-        #    out[dataset].fill(
-        #        charge=events.q,
-        #        abseta=numpy.abs(lep.eta),
-        #        mt=mt[:, 0],  # idx 0 is central value for mt
-        #        ptW=wpt[:, 0].pt,
-        #        ptW_true=wpt_true.pt,
-        #        relIso=relIso,
-        #        weight=events.evtWeight[:, self.sfweight_systs[i]],
-        #    )
-
         return out
 
     def postprocess(self, accumulant: Dict[Any, Any]) -> Any:
