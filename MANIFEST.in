@@ -7,5 +7,6 @@ global-exclude __pycache__ *.py[cod] .*
 
 include runner.py
 include get_norms.py
+include PrepareQCDTemplates.py
 include dummy_samples.json
 include *.ipynb
