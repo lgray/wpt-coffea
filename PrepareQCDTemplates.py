@@ -1,20 +1,18 @@
+import colorsys
+import pickle
+from collections import OrderedDict
+
+import boost_histogram as bh
 import matplotlib
 import matplotlib.pyplot as plt
 import mplhep as hep
 import numpy as np
-
-plt.style.use([hep.style.ROOT, hep.style.firamath])
-import colorsys
-import pickle
-# from coffea.hist import plot
-import re
-from collections import OrderedDict
-
-import boost_histogram as bh
 import scipy.optimize
 import uproot
 from coffea.util import load
-from hist import Hist, Stack
+from hist import Stack
+
+plt.style.use([hep.style.ROOT, hep.style.firamath])
 
 # load MC weights
 lumi_weights = None
@@ -119,7 +117,7 @@ if doPlotCR:
 # subtract the mc contribution from data in the CR
 mts_mu_mc = sum(list(mts_mu_scaled))
 hsubtracted = mts_mu_data + mts_mu_mc * (-1)
-# scale the MC normalization by 30% to evaluate the singal
+# scale the MC normalization by 30% to evaluate the signal
 # contamination systematics on the QCD template
 hsubtracted_scaled = mts_mu_data + mts_mu_mc * (-1.3)
 
@@ -168,7 +166,7 @@ def pol2(x, a, b, c):
 # to extrapolate the QCD template
 for iwpt in range(nPTBins):
     for i, q in enumerate([-1, 1]):
-        print(f"fit for wpt bin {iwpt}, charge bin {i}")
+        print(f"fit for wpt bin {iwpt}, charge bin {i}")  # noqa
         # to save the extrapolated histogram
         h_extrapolated = bh.Histogram(
             mts_mu_data.axes["mt"], storage=bh.storage.Weight()
